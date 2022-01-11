@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Amamiya Admins</title>
+
+    <style>
+    body {
+      margin: 0;
+      font-family: "Comic Sans MS", sans-serif;
+    }
+
+    nav {
+    width: 100%;
+    height: 12%;
+    background-color: black;
+    font-family: "Comic Sans MS", sans-serif;
+    padding: 18px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: white;
+      font-size: 18px;
+      padding-left: 10px;
+    }
+
+    .hamburger {
+      position: absolute;
+      top: 2%;
+      right: 8%;
+      cursor: pointer;
+      width: 30px;
+    }
+
+
+    .bar {
+      width: 20px;
+      height: 2px;
+      background-color: white;
+      margin: 6px 0;
+    }
+
+    /* The container <div> - needed to position the dropdown content */
+    .dropdown {
+      position: absolute;
+      display: inline-block;
+      top: 2%;
+      right: 15%;
+    }
+
+    /* Dropdown Content (Hidden by Default) */
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f1f1f1;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+    }
+
+    /* Links inside the dropdown */
+    .dropdown-content p {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      cursor: pointer;
+    }
+
+    /* Change color of dropdown links on hover */
+    .dropdown-content p:hover {background-color: #ddd;}
+
+    .queryDiv {
+      display: none;
+      background-color: rgb(0, 0, 0, 0.5);
+      width: 100%;
+      height: 100%;
+      z-index: 5;
+      position: fixed;
+    }
+
+    .updateDatabase {
+      border: 1px solid black;
+      width: 50%;
+      height: 75%;
+      position: relative;
+      top: 50%;
+      left: 50%;
+      border-radius: 12px;
+      background-color: white;
+      transform: translate(-50%,-50%);
+      -ms-transform: translate(-50%,-50%)
+      padding: 12px;
+      overflow: auto;
+      padding-left: 10px;
+    }
+
+    .updateDatabase select, input[type=text], input[type=number] {
+      padding: 12px 10px;
+      margin: 5px 0;
+      box-sizing: border-box;
+      border-radius: 12px;
+      border: 0.5px solid #ddd;
+      cursor: pointer;
+      font-family: "Comic Sans MS";
+      font-size: 15px;
+      align-self:center;
+    }
+
+
+    .updateDatabase h3 {
+      text-align: center;
+    }
+
+    .updateDatabase label {
+      font-size: 16px;
+    }
+
+    .customers {
+      display: none;
+    }
+
+    .updateSubmit {
+      cursor: pointer;
+      border-radius: 30px;
+      border:0.3px;
+      padding: 12px 10px;
+      position: absolute;
+      right: 1.5%;
+      bottom: 2%;
+    }
+
+    .updateSubmit:hover {
+      box-shadow: 0px 3px 3px 0px #e6e6e6;
+    }
+
+    .closeOverlay {
+      font-size: 27px;
+      top: 5%;
+      right: 5%;
+      color: white;
+      position: absolute;
+      cursor: pointer;
+    }
+
+    table {
+      text-align: center;
+      border-collapse: collapse;
+      border: 1px solid black;
+      border-radius: 5px;
+    }
+
+    th, td {
+      padding: 15px;
+    }
+
+    #dbTable td, #dbTable th {
+      border: 1px solid #ddd;
+    }
+
+    #dbTable tr:nth-child(even){background-color: #f2f2f2;}
+
+    #dbTable th {
+      background-color: #04AA6D;
+      color: black;
+    }
+
+    #dbTable {
+      margin-left: 10px;
+    }
+
+    #logout {
+      position: absolute;
+      right: 6%;
+      color: white;
+      top: 0%;
+      font-family: "Comic Sans MS", sans-serif;
+      font-family: 20px;
+    }
+
+    #logout:hover {
+      color: orange;
+      cursor: pointer;
+    }
+
+    #tableFiltersAndOptions select {
+      font-family: "Comic Sans MS", sans-serif;
+      font-size: 16px;
+      padding: 12px 10px;
+      margin: 5px 0;
+      box-sizing: border-box;
+      border-radius: 12px;
+      border: 0.5px solid #ddd;
+      cursor: pointer;
+      font-family: "Comic Sans MS";
+      font-size: 15px;
+    }
+
+    #tableFiltersAndOptions {
+      margin-left: 10px;
+    }
+
+    #tableFiltersAndOptions input[type=date] {
+      padding: 12px 10px;
+      margin: 5px 0;
+      box-sizing: border-box;
+      border-radius: 12px;
+      border: 0.5px solid #ddd;
+    }
+
+    #filterSubmit {
+      cursor: pointer;
+      border-radius: 30px;
+      border:0.3px;
+      padding: 12px 10px;
+    }
+
+    #filterSubmit:hover {
+      box-shadow: 0px 3px 3px 0px #e6e6e6;
+    }
+
+    </style>
+  </head>
+  <body>
+
+    <div class="queryDiv">
+      <p class="closeOverlay">X</p>
+      <form class="updateDatabase" id="updateBranches">
+
+        <h3>Update Existing Branch Information</h3>
+
+        <label>Branch Name: </label>
+        <select id="branchRecords">
+          {%for b in branches%}
+            <option>{{b['name']}}</option>
+          {%endfor%}
+        </select>
+        <br><br>
+
+        <label>Telephone Number: </label>
+        <input type="text" id="branchTelNo" value="">
+        <br><br>
+
+        <label>Latitude: </label>
+        <input type="number" id="branchLat" step="any" value="">
+        <br><br>
+
+        <label>Longitude: </label>
+        <input type="number" id="branchLong" step="any" value="">
+        <br><br>
+
+        <label>Region: </label>
+        <input type="text" id="branchRegion" value="">
+        <!-- Here is a slight comment for when you are coming back to your work:
+            Essentiall what is supposed to happen is when the select list changes
+          to one of the choices available, the other inputs will be automatically filled
+        with the original information that the admin can then change.
+
+        Alternatively, with the other update button, you should be able to create
+        new records in the database using the form that will be provided for you.-->
+
+        <input type="submit" class="updateSubmit" value="Update Records">
+      </form>
+    </div>
+
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">Contact</a>
+      <a href="#">About Us</a>
+
+
+
+      <div class="dropdown">
+        <div class="hamburger dropbtn">
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+        </div>
+        <div class="dropdown-content">
+          <p class="tables">Branches</p>
+          <p class="tables">User Accounts</p>
+          <p class="tables">Employees</p>
+          <p class="tables">Customers</p>
+          <p class="tables">Products</p>
+          <p class="tables">Purchases</p>
+        </div>
+      </div>
+
+    </nav>
+
+    <div id='filters'>
+      <form id="tableFiltersAndOptions">
+
+      </form>
+
+    </div>
+
+    <div>
+
+      <div id="updateExistingBranch">
+        Update Existing Branch
+      </div>
+
+      <div id="createNewBranchRecord">
+        Create New Branch Record
+      </div>
+    </div>
+    <p></p>
+
+    <table id="dbTable">
+
+    </table>
+
+
+    <p id="logout">Log Out</p>
+
+    <script>
+      var dropdownToggle = 0;
+      var filterToggleVar = 0;
+      const tableList = document.getElementsByClassName('tables');
+      const dbTable = document.getElementById('dbTable');
+      const logout = document.getElementById('logout');
+      const branchUpdate = document.getElementById('updateExistingBranch');
+      const branchOverlay = document.getElementsByClassName('queryDiv')[0];
+      const closeBranchOverlay = document.getElementsByClassName('closeOverlay')[0];
+
+      // Show dropdown menu onclicking hamburger menu.
+      document.getElementsByClassName("dropdown")[0].onclick = function(e){
+        if (dropdownToggle % 2 === 0){
+          document.getElementsByClassName('dropdown-content')[0].style.display = 'block';
+          dropdownToggle++
+        } else {
+          dropdownToggle--
+          document.getElementsByClassName('dropdown-content')[0].style.display = 'none';
+        }
+      };
+
+      const searchFilters = document.getElementById('tableFiltersAndOptions');
+
+      branchUpdate.onclick = function(event){
+        branchOverlay.style.display = 'block';
+      }
+
+      closeBranchOverlay.onclick = function(event){
+        branchOverlay.style.display = 'none';
+      }
+
+      // Show forms for updating tables
+      document.addEventListener('click', function(e){
+        if (e.target.className === 'tables'){
+
+          var eventTarget = e.target.innerHTML;
+
+          for (var i = 0; i < tableList.length; i++){
+            var tableName = tableList[i].innerHTML;
+
+            if (eventTarget === tableName){
+
+              dbTable.innerHTML = '';
+              searchFilters.innerHTML = '';
+
+              if (tableName.toLowerCase() === 'branches'){
+
+                searchFilters.insertAdjacentHTML('beforeend', '<div id="branchFilters"><p>Filter By:</p>'+
+                  '<label for="branch_name">Branch Name: </label><select id="branchName" name="branch_name">'+
+                  '<option value="none" selected></option><option>--All--</option>'+
+                  '{%for b in branches%}<option>{{b['name']}}</option>{%endfor%}</select>'+
+                  '</div><p></p><input type="submit" id="filterSubmit" value="Search">');
+
+                const branchFilters = document.getElementById('branchFilters');
+
+                searchFilters.onsubmit = function(e){
+                  e.preventDefault();
+
+                  dbTable.innerHTML = '';
+
+                  const branchName = document.getElementById('branchName').value;
+
+                  fetch('/amamiya/admin/branch_query', {
+                    method : 'POST',
+                    body : JSON.stringify({
+                      "branchName" : branchName
+                    }),
+                    headers : {
+                      "Content-Type" : "application/json"
+                    }
+                  })
+                  .then(function(response){return response.json()})
+                  .then(function(jsonResponse){
+                    const branchTable = jsonResponse["branch_table"]
+
+                    for (var i = 0; i < branchTable.length; i++){
+                      var branchRecord = branchTable[i];
+                      var row = document.createElement('TR');
+
+                      for (var j = 0; j < branchRecord.length; j++){
+                        var column = document.createElement('TD');
+
+                        column.innerHTML = branchRecord[j];
+                        row.appendChild(column);
+                      }
+
+                      dbTable.insertAdjacentHTML('beforeend', row.innerHTML);
+                    }
+                  })
+
+                }
+
+
+              } else if (tableName.toLowerCase() === 'user accounts'){
+
+
+              } else if (tableName.toLowerCase() === 'employees'){
+
+                searchFilters.insertAdjacentHTML('beforeend', '<div id="employeeFilters">'+
+                  '<p>Filter Employees By:</p><label  for="employee_name">Employee Name: </label>'+
+                  '<select id="employeeName" name="employee_name"><option value="none" selected></option>'+
+                  '<option>--All--</option>{%for e in employees%}<option>{{e['name']}}</option>'+
+                  '{%endfor%}</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
+                  '<label for="filterby_branch">Branch: </label><select id="branch_name" name="filterby_branch">'+
+                  '<option value="none" selected></option>{%for b in branches%}'+
+                  '<option>{{b['name']}}</option>{%endfor%}'+
+                  '</select></div><p></p><input type="submit" id="filterSubmit" value="Search">');
+
+                const employeeFilters = document.getElementById('employeeFilters');
+
+                document.getElementById('employeeName').onchange = function(e){
+                  document.getElementById('branch_name').value = "";
+                }
+
+                document.getElementById('branch_name').onchange = function(e){
+                  document.getElementById('employeeName').value = "";
+                }
+
+                searchFilters.onsubmit = function(e){
+                  e.preventDefault();
+
+                  dbTable.innerHTML = '';
+
+                  const employeeName = document.getElementById('employeeName').value;
+                  const filterEmployeesByBranch = document.getElementById('branch_name').value;
+
+                  fetch('/amamiya/admin/employee_query', {
+                    method : 'POST',
+                    body : JSON.stringify({
+                      "employeeName" : employeeName,
+                      "employeeByBranch" : filterEmployeesByBranch
+                    }),
+                    headers : {
+                      "Content-Type" : "application/json"
+                    }
+                  })
+                  .then(function(response){return response.json()})
+                  .then(function(jsonResponse){
+                    const employeeTable = jsonResponse["employee_table"];
+                    const branchEmployees = jsonResponse["branch_employees"];
+
+                    for (var i = 0; i < employeeTable.length; i++){
+                      var employeeRecord = employeeTable[i];
+                      var row = document.createElement('TR');
+
+                      for (var j = 0; j < employeeRecord.length; j++){
+                        var column = document.createElement('TD');
+
+                        column.innerHTML = employeeRecord[j];
+                        row.appendChild(column);
+
+                      }
+
+                      dbTable.insertAdjacentHTML('beforeend', row.innerHTML);
+                    }
+
+                    for (var i = 0; i < branchEmployees.length; i++){
+                      var branchEmployeeRecord = branchEmployees[i];
+                      var row = document.createElement('TR');
+
+                      for (var j = 0; j < branchEmployeeRecord.length; j++){
+                        var column = document.createElement('TD');
+
+                        column.innerHTML = branchEmployeeRecord[j];
+                        row.appendChild(column);
+                      }
+
+                      dbTable.insertAdjacentHTML('beforeend', row.innerHTML);
+                    }
+                  })
+
+                }
+
+
+              } else if (tableName.toLowerCase() === 'customers'){
+
+                searchFilters.insertAdjacentHTML('beforeend', '<div id="customerFilters">'+
+                  '<p>Filter By:</p><label  for="customer_name">Customer Name: </label>'+
+                  '<select id="customerName"  name="customer_name">'+
+                  '<option value="none" selected></option><option>--All--</option>'+
+                  '{%for c in customers%}<option>{{c['name']}}</option>{%endfor%}'+
+                  '</select></div><p></p><input type="submit" id="filterSubmit" value="Search">');
+
+                const customerFilters = document.getElementById('customerFilters');
+
+                searchFilters.onsubmit = function(e){
+                  e.preventDefault();
+
+                  dbTable.innerHTML = '';
+
+                  const customerName = document.getElementById('customerName').value;
+
+                  fetch('/amamiya/admin/customer_query', {
+                    method : 'POST',
+                    body : JSON.stringify({
+                      "customerName" : customerName
+                    }),
+                    headers : {
+                      "Content-Type" : "application/json"
+                    }
+                  })
+                  .then(function(response){return response.json()})
+                  .then(function(jsonResponse){
+                    const customersTable = jsonResponse["customers_table"]
+
+                    for (var i = 0; i < customersTable.length; i++){
+                      var customersRecord = customersTable[i];
+                      var row = document.createElement('TR');
+
+                      for (var j = 0; j < customersRecord.length; j++){
+                        var column = document.createElement('TD');
+
+                        if (customersRecord[j] === ""){
+                          column.innerHTML = "----"
+                        } else {
+                          column.innerHTML = customersRecord[j];
+                        }
+
+                        row.appendChild(column);
+                      }
+
+                      dbTable.insertAdjacentHTML('beforeend', row.innerHTML);
+                    }
+                  })
+                }
+
+              } else if (tableName.toLowerCase() === 'products'){
+
+                searchFilters.insertAdjacentHTML('beforeend', '<div id="productFilters">'+
+                  '<p>Filter By:</p><label for="product_name">Product Name: </label>'+
+                  '<select id="productName" name="product_name"><option value="none"'+
+                  'selected></option><option>--All--</option>{%for p in products%}'+
+                  '<option>{{p['product_name']}}</option>{%endfor%}</select></div>'+
+                  '<p></p><input type="submit" id="filterSubmit" value="Search">');
+
+                const productFilters = document.getElementById('productFilters');
+
+                searchFilters.onsubmit = function(e){
+                  e.preventDefault();
+
+                  dbTable.innerHTML = '';
+
+                  const productName = document.getElementById('productName').value;
+
+                  fetch('/amamiya/admin/product_query', {
+                    method : 'POST',
+                    body : JSON.stringify({
+                      "productName" : productName
+                    }),
+                    headers : {
+                      "Content-Type" : "application/json"
+                    }
+                  })
+                  .then(function(response){return response.json()})
+                  .then(function(jsonResponse){
+                    const productTable = jsonResponse["product_table"];
+
+                    for (var i = 0; i < productTable.length; i++){
+                      var productRecord = productTable[i];
+                      var row = document.createElement('TR');
+
+                      for (var j = 0; j < productRecord.length; j++){
+                        var column = document.createElement('TD');
+
+                        if (productRecord[j] === ""){
+                          column.innerHTML = "----"
+                        } else {
+                          column.innerHTML = productRecord[j];
+                        }
+
+                        row.appendChild(column);
+                      }
+
+                      dbTable.insertAdjacentHTML('beforeend', row.innerHTML);
+                    }
+                  })
+                }
+
+              } else if (tableName.toLowerCase() === 'purchases'){
+
+                searchFilters.insertAdjacentHTML('beforeend', '<div id="purchaseFilters">'+
+                  '<p>Filter Purchases By:</p><label for="branch_name">Branch Name: </label>'+
+                  '<select id="branchName" name="branch_name"><option value="none" selected></option>'+
+                  '{%for b in branches%}<option>{{b['name']}}</option>{%endfor%}'+
+                  '</select>&nbsp;&nbsp;&nbsp;&nbsp;<label  for="customer_name">'+
+                  'Customer Name: </label><select id="customerName"  name="customer_name">'+
+                  '<option value="none" selected></option>{%for c in customers%}'+
+                  '<option>{{c['name']}}</option>{%endfor%}</select>&nbsp;&nbsp;'+
+                  '&nbsp;&nbsp;<label for="product_name">Product Name: </label>'+
+                  '<select id="productName" name="product_name"><option value="none"'+
+                  'selected></option>{%for p in products%}<option>{{p['product_name']}}'+
+                  '</option>{%endfor%}</select>&nbsp;&nbsp;&nbsp;&nbsp;<p>Date Range: </p>'+
+                  '<label for="startDate">Start Date: </label><input type="date"'+
+                  'id="startDate" name="startDate">&nbsp;&nbsp;&nbsp;&nbsp;'+
+                  '<label  for="endDate">End Date: </label><input type="date"'+
+                  'id="endDate" name="endDate">&nbsp;&nbsp;&nbsp;&nbsp;<label'+
+                  'for="allTime">All Time: </label><input type="checkbox" id="allTime" checked>'+
+                  '</div><input type="submit" id="filterSubmit" value="Search">');
+
+                const purchaseFilters = document.getElementById('purchaseFilters');
+
+                document.getElementById('startDate').onchange = function(event){
+                  document.getElementById('allTime').checked = false;
+                }
+
+                document.getElementById('endDate').onchange = function(event){
+                  document.getElementById('allTime').checked = false;
+                }
+
+                document.getElementById('allTime').onchange = function(event){
+                  document.getElementById('startDate').value = '';
+                  document.getElementById('endDate').value = '';
+                }
+
+                searchFilters.onsubmit = function(e){
+                  e.preventDefault();
+
+                  dbTable.innerHTML = '';
+
+
+                  const allTime = document.getElementById('allTime').checked;
+                  const branch = document.getElementById('branchName').value;
+                  const customer = document.getElementById('customerName').value;
+                  const product = document.getElementById('productName').value;
+                  const startDate = document.getElementById('startDate').value;
+                  const endDate = document.getElementById('endDate').value;
+
+                  fetch('/amamiya/admin/purchase_query', {
+                    method : 'POST',
+                    body : JSON.stringify({
+                      "branch" : branch,
+                      "customer" : customer,
+                      "product" : product,
+                      "startDate" : startDate,
+                      "endDate" : endDate,
+                      "allTime" : allTime
+                    }),
+                    headers : {
+                      "Content-Type" : "application/json"
+                    }
+                  })
+                  .then(function(response){return response.json()})
+                  .then(function(jsonResponse){
+                    const resultTable = jsonResponse["resultTable"];
+
+                    for (var i = 0; i < resultTable.length; i++){
+                      var resultRecord = resultTable[i];
+                      var row = document.createElement('TR');
+
+                      for (var j = 0; j < resultRecord.length; j++){
+                        var column = document.createElement('TD');
+                        column.innerHTML = resultRecord[j];
+                        row.appendChild(column);
+                      }
+
+                      dbTable.insertAdjacentHTML('beforeend', row.innerHTML);
+                    }
+                  })
+                }
+
+              }
+            }
+          }
+        }
+      })
+
+    </script>
+  </body>
+</html>

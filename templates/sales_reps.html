@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Amamiya Sales Reps</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: "Comic Sans MS", sans-serif;
+      }
+
+      #leftHandle {
+        position: absolute;
+        left: 0%;
+        width: 60%;
+        height: 100%;
+        overflow: auto;
+      }
+
+      #rightHandle {
+        position: absolute;
+        right: 1%;
+        width: 39%;
+        height: 100%;
+        overflow: auto;
+      }
+
+      table {
+        text-align: center;
+        border-collapse: collapse;
+        border: 1px solid black;
+        border-radius: 5px;
+      }
+
+      th, td {
+        padding: 15px;
+      }
+
+      .purchase_details td, .purchase_details th {
+        border: 1px solid #ddd;
+      }
+
+      .purchase_details tr:nth-child(even){background-color: #f2f2f2;}
+
+      .purchase_details th {
+        background-color: #04AA6D;
+        color: black;
+      }
+
+      #purchaseDetails {
+        border: 1px solid #ddd;
+        position: relative;
+        align-items: center;
+        left: 20%;
+        width: 50%;
+        height: 35%;
+        padding: 18px;
+        border-radius: 30px;
+      }
+
+      #submit1 {
+        cursor: pointer;
+        position: absolute;
+        right: 1.5%;
+        bottom: 2%;
+        border-radius: 30px;
+        border:0.3px;
+        padding: 12px 10px;
+      }
+
+      #submit1:hover {
+        box-shadow: 0px 3px 3px 0px #e6e6e6;
+      }
+
+      #purchaseDetails input[type=text], input[type=number] {
+        padding: 12px 10px;
+        margin: 5px 0;
+        box-sizing: border-box;
+        border-radius: 12px;
+        border: 0.5px solid #ddd;
+      }
+
+      #purchaseDetails select {
+        padding: 12px 10px;
+        margin: 5px 0;
+        box-sizing: border-box;
+        border-radius: 12px;
+        border: 0.5px solid #ddd;
+        cursor: pointer;
+        font-family: "Comic Sans MS";
+        font-size: 15px;
+      }
+
+
+      #clearButton {
+        cursor: pointer;
+        border-radius: 30px;
+        border: 0.3px;
+        padding: 12px 10px;
+      }
+
+      #clearButton:hover {
+        box-shadow: 0px 3px 3px 0px #e6e6e6;
+      }
+
+      #selectCustomer select {
+        padding: 12px 10px;
+        margin: 5px 0;
+        box-sizing: border-box;
+        border-radius: 12px;
+        border: 0.5px solid #ddd;
+        cursor: pointer;
+        font-family: "Comic Sans MS";
+        font-size: 15px;
+      }
+
+      nav {
+      width: 100%;
+      height: 12%;
+      background-color: black;
+      font-family: "Comic Sans MS", sans-serif;
+      padding: 18px;
+      }
+
+      nav a {
+        text-decoration: none;
+        color: white;
+        font-size: 18px;
+        padding-left: 10px;
+      }
+
+      .hamburger {
+        position: absolute;
+        top: 2%;
+        right: 8%;
+        cursor: pointer;
+        width: 30px;
+      }
+
+
+      .bar {
+        width: 20px;
+        height: 2px;
+        background-color: white;
+        margin: 6px 0;
+      }
+
+      /* The container <div> - needed to position the dropdown content */
+      .dropdown {
+        position: absolute;
+        display: inline-block;
+        top: 2%;
+        right: 12%;
+      }
+
+      /* Dropdown Content (Hidden by Default) */
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+      }
+
+      /* Links inside the dropdown */
+      .dropdown-content p {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        cursor: pointer;
+      }
+
+      /* Change color of dropdown links on hover */
+      .dropdown-content p:hover {background-color: #ddd;}
+
+      #b_id, #summaryTable {
+        display: none;
+      }
+
+      #summary {
+        position: absolute;
+        display: none;
+        top: 10%;
+        right : 0%;
+        width: 38%;
+        height: 100%;
+        overflow: auto;
+        text-align: center;
+      }
+
+      #getSummary {
+        cursor: pointer;
+        border-radius: 30px;
+        border: 0.3px solid #ddd;
+        padding: 12px 10px;
+        width: 25%;
+        background-color: #eee;
+      }
+
+      #getSummary:hover {
+        box-shadow: 0px 3px 3px 0px #e6e6e6;
+      }
+
+      #goods select {
+        padding: 12px 10px;
+        margin: 5px 0;
+        box-sizing: border-box;
+        position: absolute;
+        top: 2%;
+        right: 25%;
+        border-radius: 12px;
+        border: 0.5px solid #ddd;
+        cursor: pointer;
+        font-family: "Comic Sans MS";
+        font-size: 15px;
+      }
+
+      #search {
+        cursor: pointer;
+        border-radius: 30px;
+        border: 0.3px;
+        padding: 12px 10px;
+        position: absolute;
+        top: 3.5%;
+        right: 10%;
+      }
+
+      #search:hover {
+        box-shadow: 0px 3px 3px 0px #e6e6e6;
+      }
+
+    </style>
+
+  </head>
+  <body>
+
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">Contact</a>
+      <a href="#">About Us</a>
+
+
+
+      <div class="dropdown">
+        <div class="hamburger dropbtn">
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+        </div>
+        <div class="dropdown-content">
+          <p id="purchases">Purchases</p>
+          <p id="salesSummary">Sales Summary</p>
+        </div>
+      </div>
+
+    </nav>
+
+    <div id="rightHandle">
+
+      <form id="selectCustomer">
+        <label for="customer_name">Select customer:</label>
+        <select id="customerName" name="customer_name">
+          <option value="none" selected disabled hidden></option>
+          {%for c in customers%}
+          <option>{{c['name']}}</option>
+          {%endfor%}
+        </select>
+        <br><br>
+
+      </form>
+
+      <form id="purchaseDetails">
+        <label for="product_name">Product Name: </label>
+        <br>
+        <select id="productName" name="product_name">
+          <option value="none" selected disabled hidden></option>
+          {%for p in products%}
+          <option>{{p['product_name']}}</option>
+          {%endfor%}
+        </select>
+
+        <br><br>
+
+        <label for="product_qty">Product Quantity: </label>
+        <br>
+        <input type="number" name="product_qty" min="1" required id="productQty">
+        <br><br>
+
+        <input type="submit" id="submit1" name="addToPurchase" value="Add To Purchase">
+      </form>
+      <br>
+
+      <form id="clearDetails">
+        <input type="submit" name="clearButton" id="clearButton" value="Clear Table">
+      </form>
+    </div>
+
+    <div id="leftHandle">
+      <table id="purchaseDetailsTable" class="purchase_details">
+        <p></p>
+        <tr>
+          <td>Product ID</td>
+          <td>Product Name</td>
+          <td>Product Quantity</td>
+          <td>Unit Price(cedis)</td>
+          <td>Product Cost(cedis)</td>
+        </tr>
+      </table>
+
+      <p id="absent"></p>
+      <p id="b_id">{{branchId}}</p>
+    </div>
+
+
+      <table id="summaryTable" class="purchase_details">
+        <p></p>
+        <tr>
+          <td>Purchase Id</td>
+          <td>Product Name</td>
+          <td>Price Sold</td>
+          <td>Quantity Sold</td>
+          <td>Time of Purchase</td>
+        </tr>
+
+      </table>
+
+      <div id="summary">
+        <p id="getSummary">Get Summary</p>
+        <form id="goods">
+
+          <select id="products">
+            <option value="none" selected disabled hidden></option>
+            {%for p in products%}
+            <option>{{p['product_name']}}</option>
+            {%endfor%}
+          </select>
+
+          <input type="submit"id="search" value="Search">
+
+        </form>
+
+      </div>
+
+
+
+  <script>
+    var offOn = 0;
+    const table = document.getElementById('purchaseDetailsTable');
+    const leftHandle = document.getElementById('leftHandle');
+    const rightHandle = document.getElementById('rightHandle');
+    const purchaseDetailsTableUpdate = document.getElementById('clearDetails');
+    const purchaseTab = document.getElementById('purchases');
+    const salesSummaryTab = document.getElementById('salesSummary');
+    const clearTable = document.getElementById('clearDetails');
+    var detailNum = 0;
+    const b_id = document.getElementById('b_id').innerHTML;
+    const summaryTable = document.getElementById('summaryTable');
+    const summary = document.getElementById('summary');
+    // Display the dropdown list containing different purchase forms.
+    document.getElementsByClassName('dropdown')[0].onclick = function(e){
+
+      if (offOn % 2 === 0){
+        document.getElementsByClassName('dropdown-content')[0].style.display = 'block';
+        offOn++
+      } else {
+        offOn--
+        document.getElementsByClassName('dropdown-content')[0].style.display = 'none';
+      }
+    }
+
+    // Show the purchase tab:
+    purchaseTab.onclick = function(e){
+      leftHandle.style.display = 'block';
+      rightHandle.style.display = 'block';
+      summaryTable.style.display = 'none';
+      summary.style.display = 'none';
+    }
+
+    // Show the Sales Summary tab:
+    salesSummaryTab.onclick = function(e){
+      leftHandle.style.display = 'none';
+      rightHandle.style.display = 'none';
+      summaryTable.style.display = 'table';
+      summary.style.display = 'block';
+
+      // Clear any details in the table if there are any.
+      for(var i = summaryTable.children.length; i > 1; i--){
+        if (i !== 0){
+          summaryTable.lastChild.remove();
+        }
+      }
+
+      // Fetch today's sales from the database.
+      fetch('/amamiya/sales_reps/summary', {
+        method : 'POST',
+        body : JSON.stringify({
+          "summary" : "summary"
+        }),
+        headers : {
+          "Content-Type" : "application/json"
+        }
+      })
+      .then(function(response){return response.json()})
+      .then(function(jsonResponse){
+          const salesToday = jsonResponse["salesToday"];
+          const goodsSold = jsonResponse["goodsSold"];
+
+          for(var i = 0; i < salesToday.length; i++){
+            var row = salesToday[i];
+            var tableRow = document.createElement('TR');
+
+            for(var j = 0; j < row.length; j++){
+              var tableCol = document.createElement('TD');
+              tableCol.innerHTML = row[j];
+              tableRow.appendChild(tableCol);
+            }
+            summaryTable.appendChild(tableRow);
+          }
+
+          for(var k = 0; k < goodsSold.length; k++){
+            var record = goodsSold[k];
+            if (k !== goodsSold.length - 1){
+              var nextRecord = goodsSold[k + 1];
+            }
+
+            if (record[0] === nextRecord[0]){
+                record[1] = record[1] + nextRecord[1];
+                record[2] = record[2] + nextRecord[2];
+
+                goodsSold.splice((k + 1), 1);
+            }
+          }
+
+          getSummary.onclick = function(e){
+
+            for(var i = summary.children.length; i > 1; i--){
+              if (i !== 2){
+                summary.lastChild.remove();
+              }
+            }
+            var sum = 0;
+            for(var i = 0; i < goodsSold.length; i++){
+              var product = goodsSold[i];
+              var paragraph = document.createElement('P');
+
+              paragraph.innerHTML = "Quantity of "+ product[0] +" sold : "+ product[1] +
+                "<br>Money obtained from "+ product[0] +" : GH₵"+ product[2] +"<br><br>";
+
+              summary.appendChild(paragraph);
+
+              sum = sum + product[2];
+            }
+
+            const totalAmtCedis = document.createElement('P');
+            totalAmtCedis.innerHTML = "<br><br><b>Total sales : GH₵"+ sum +"</b>";
+            summary.appendChild(totalAmtCedis);
+          }
+
+          const search = document.getElementById('goods');
+          search.onsubmit = function(e){
+            e.preventDefault();
+            const product = document.getElementById('products').value;
+
+            for(var i = summary.children.length; i > 1; i--){
+              if (i !== 2){
+                summary.lastChild.remove();
+              }
+            }
+
+            for(var i = 0; i < goodsSold.length; i++){
+              record = goodsSold[i];
+              if(product === record[0]){
+                var exclusiveSearch = document.createElement('P');
+
+                exclusiveSearch.innerHTML = "Quantity of "+ record[0] +" sold : "+ record[1] +
+                  "<br>Money obtained from "+ record[0] +" : GH₵"+ record[2] +"<br><br>";
+
+                summary.appendChild(exclusiveSearch);
+              }
+            }
+          }
+      })
+    }
+
+    // Fill the purchase details table with info from server.
+    document.getElementById('purchaseDetails').onsubmit = function(e){
+      e.preventDefault();
+      detailNum++;
+      var productId = '';
+      var productQty = '';
+      var productPrice = '';
+
+      fetch('/amamiya/sales_reps/details', {
+        method : 'POST',
+        body : JSON.stringify({
+          "productName" : document.getElementById('productName').value,
+          "productQty" : document.getElementById('productQty').value
+        }),
+        headers : {
+          "Content-Type" : "application/json"
+        }
+      })
+      .then(function(response){
+        return response.json();
+      })
+      .then(function(jsonResponse){
+        if (jsonResponse["productId"] === ''){
+          document.getElementById('absent').innerHTML = 'Product name invalid!';
+        } else {
+          document.getElementById('absent').innerHTML = '';
+          let row = document.createElement('TR');
+          for (var i = 0; i < 5; i++){
+            let col = document.createElement('TD');
+            row.appendChild(col);
+          }
+          // Fill purchase form with necessary information based on data from
+          // database.
+          row.children[0].innerHTML = jsonResponse["productId"];
+          productId = jsonResponse["productId"];
+          row.children[1].innerHTML = jsonResponse["productName"];
+          row.children[2].innerHTML = jsonResponse["productQty"];
+          productQty = jsonResponse["productQty"];
+          row.children[3].innerHTML = jsonResponse["unitPrice"];
+          productPrice = jsonResponse["unitPrice"];
+          row.children[4].innerHTML = jsonResponse["productCost"];
+
+          document.getElementById('purchaseDetailsTable').appendChild(row);
+
+          const customer = document.getElementById('customerName').value;
+
+          fetch('/amamiya/sales_reps/update_purchases', {
+            method : 'POST',
+            body : JSON.stringify({
+              "product_id" : productId,
+              "productQty" : productQty,
+              "productPrice" : productPrice,
+              "detailNum" : detailNum,
+              "customer" : customer,
+              "b_id" : b_id
+            }),
+            headers : {
+              "Content-Type" : "application/json"
+            }
+          })
+          .then(function(response){return response.json()})
+          .then(function(jsonResponse){})
+        }
+      })
+    }
+
+    // Clear the purchase table to make way for a new purchase:
+    clearTable.onsubmit = function(e){
+      e.preventDefault();
+
+      for(var i = table.children.length; i > 1; i--){
+        if (i !== 0){
+          table.lastChild.remove();
+        }
+      }
+      detailNum = 0;
+    }
+
+  </script>
+  </body>
+</html>

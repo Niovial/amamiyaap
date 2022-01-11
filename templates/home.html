@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <style media="screen">
+      body {
+        margin: 0px;
+      }
+
+      nav {
+        width: 100%;
+        height: 7%;
+        background-color: black;
+        font-family: "Comic Sans MS", sans-serif;
+        padding: 15px;
+      }
+
+      nav a {
+        text-decoration: none;
+        position: relative;
+        color: white;
+        font-size: 18px;
+        padding-left: 10px;
+        top: 50%;
+      }
+
+      #signIn {
+        position: absolute;
+        right:10%;
+        color: white;
+        top: 0%;
+        font-family: "Comic Sans MS", sans-serif;
+        font-family: 18px;
+      }
+
+      #signIn:hover {
+        color: orange;
+        cursor: pointer;
+      }
+
+      #queryDiv {
+        display: none;
+        background-color: rgb(0, 0, 0, 0.5);
+        width: 100%;
+        height: 100%;
+        z-index: 5;
+        position: fixed;
+        font-family: "Comic Sans MS", sans-serif;
+      }
+
+      #queryForm {
+        border: 1px solid black;
+        width: 50%;
+        height: 50%;
+        position: relative;
+        top: 50%;
+        left: 50%;
+        border-radius: 12px;
+        background-color: white;
+        transform: translate(-50%,-50%);
+        -ms-transform: translate(-50%,-50%)
+        padding: 12px;
+        text-align: center;
+      }
+
+      #queryFormSubmit {
+        cursor: pointer;
+        border-radius: 30px;
+        border:0.3px;
+        padding: 12px 10px;
+        position: absolute;
+        right: 1.5%;
+        bottom: 2%;
+      }
+
+      #queryFormSubmit:hover {
+        box-shadow: 0px 3px 3px 0px #e6e6e6;
+      }
+
+      #queryForm input[type=text], input[type=password] {
+        padding: 12px 10px;
+        margin: 5px 0;
+        box-sizing: border-box;
+        border-radius: 12px;
+        border: 0.5px solid #ddd;
+        font-family: "Comic Sans MS";
+        font-size: 15px;
+        align-self:center;
+      }
+
+      #closeOverlay {
+        font-size: 27px;
+        top: 5%;
+        right: 5%;
+        color: white;
+        position: absolute;
+        cursor: pointer;
+      }
+
+      h3 {
+        text-align: center;
+      }
+
+      #auth {
+        display: none;
+        color: red;
+      }
+
+    </style>
+    <title>Amamiya Home Page</title>
+  </head>
+  <body>
+
+    <div id="queryDiv">
+      <p id="closeOverlay">X</p>
+
+          <form id="queryForm" action="/amamiya/loginAuth" method="post" class="login">
+            <h3>Enter your login credentials</h3>
+            <br>
+            <p id="auth">{{success}}</p>
+
+            <label for="username">Username: </label>
+            <input id="username" type="text" required placeholder="E.g. Eric" name="username">
+
+            <br><br>
+
+            <label for="password">Password: </label>
+            <input id="password" type="password" required name="password">
+            <input type="submit" id="queryFormSubmit" name="login" value="Login">
+          </form>
+
+    </div>
+
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">Contact</a>
+      <a href="#">About Us</a>
+
+
+    </nav>
+
+    <p id="signIn">Sign In</p>
+
+    <p></p>
+
+
+    <script>
+    const overlay = document.getElementById('queryDiv');
+    const closeOverlay = document.getElementById('closeOverlay');
+    const queryForm = document.getElementById('queryForm');
+    const auth = document.getElementById('auth');
+
+    // Display overlay with login form.
+    document.getElementById('signIn').onclick = function(e){
+      overlay.style.display = 'block';
+    }
+
+    // 'X' for closing overlay with login form.
+    closeOverlay.onclick = function(e){
+      overlay.style.display = 'none';
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+    }
+
+    // Display "incorrect" message upon login failure.
+    if(auth.innerHTML === "false"){
+      auth.innerHTML = 'Incorrect username or password!';
+      overlay.style.display = 'block';
+      auth.style.display = 'block';
+    }
+    </script>
+
+  </body>
+</html>
